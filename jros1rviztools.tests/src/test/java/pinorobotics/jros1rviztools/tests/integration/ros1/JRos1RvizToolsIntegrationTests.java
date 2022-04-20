@@ -20,14 +20,16 @@ package pinorobotics.jros1rviztools.tests.integration.ros1;
 import static pinorobotics.jros1rviztools.tests.integration.ros1.TestConstants.RVIZ_MARKER_TOPIC;
 import static pinorobotics.jros1rviztools.tests.integration.ros1.TestConstants.URL;
 
-import id.jros1client.JRos1Client;
+import id.jros1client.JRos1ClientFactory;
+import id.jrosclient.JRosClient;
 import id.xfunction.logging.XLogger;
 import java.net.MalformedURLException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pinorobotics.jros1rviztools.JRos1RvizTools;
+import pinorobotics.jros1rviztools.JRos1RvizToolsFactory;
+import pinorobotics.jrosrviztools.JRosRvizTools;
 import pinorobotics.jrosrviztools.entities.Color;
 import pinorobotics.jrosrviztools.entities.MarkerType;
 import pinorobotics.jrosrviztools.entities.Point;
@@ -37,8 +39,10 @@ import pinorobotics.jrosrviztools.entities.Scales;
 /** @author aeon_flux aeon_flux@eclipso.ch */
 public class JRos1RvizToolsIntegrationTests {
 
-    private JRos1Client client;
-    private JRos1RvizTools rvizTools;
+    private static final JRos1ClientFactory clientFactory = new JRos1ClientFactory();
+    private static final JRos1RvizToolsFactory toolsFactory = new JRos1RvizToolsFactory();
+    private JRosClient client;
+    private JRosRvizTools rvizTools;
 
     @BeforeAll
     public static void setupAll() {
@@ -47,8 +51,8 @@ public class JRos1RvizToolsIntegrationTests {
 
     @BeforeEach
     public void setup() throws MalformedURLException {
-        client = new JRos1Client(URL);
-        rvizTools = new JRos1RvizTools(client, "map", RVIZ_MARKER_TOPIC);
+        client = clientFactory.createJRosClient(URL);
+        rvizTools = toolsFactory.createJRosRvizTools(client, "map", RVIZ_MARKER_TOPIC);
     }
 
     @AfterEach
