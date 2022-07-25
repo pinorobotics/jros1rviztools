@@ -15,12 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/** @author aeon_flux aeon_flux@eclipso.ch */
+/**
+ * @author aeon_flux aeon_flux@eclipso.ch
+ */
 open module jros1rviztools.tests {
     requires id.xfunction;
     requires jros1client;
     requires jros1rviztools;
     requires org.junit.jupiter.api;
 
-    exports pinorobotics.jros1rviztools.tests.integration.ros1;
+    exports pinorobotics.jros1rviztools.tests.integration;
 }

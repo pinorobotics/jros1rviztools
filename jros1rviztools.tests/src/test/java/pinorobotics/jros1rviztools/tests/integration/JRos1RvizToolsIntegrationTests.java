@@ -15,10 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package pinorobotics.jros1rviztools.tests.integration.ros1;
+package pinorobotics.jros1rviztools.tests.integration;
 
-import static pinorobotics.jros1rviztools.tests.integration.ros1.TestConstants.RVIZ_MARKER_TOPIC;
-import static pinorobotics.jros1rviztools.tests.integration.ros1.TestConstants.URL;
+import static pinorobotics.jros1rviztools.tests.integration.TestConstants.RVIZ_MARKER_TOPIC;
+import static pinorobotics.jros1rviztools.tests.integration.TestConstants.URL;
 
 import id.jros1client.JRos1ClientFactory;
 import id.jrosclient.JRosClient;
@@ -36,7 +36,9 @@ import pinorobotics.jrosrviztools.entities.Point;
 import pinorobotics.jrosrviztools.entities.Pose;
 import pinorobotics.jrosrviztools.entities.Scales;
 
-/** @author aeon_flux aeon_flux@eclipso.ch */
+/**
+ * @author aeon_flux aeon_flux@eclipso.ch
+ */
 public class JRos1RvizToolsIntegrationTests {
 
     private static final JRos1ClientFactory clientFactory = new JRos1ClientFactory();
