@@ -53,7 +53,7 @@ public class JRos1RvizToolsIntegrationTests {
 
     @BeforeEach
     public void setup() throws MalformedURLException {
-        client = clientFactory.createJRosClient(URL);
+        client = clientFactory.createClient(URL);
         rvizTools = toolsFactory.createJRosRvizTools(client, "map", RVIZ_MARKER_TOPIC);
     }
 
