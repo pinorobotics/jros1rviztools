@@ -28,8 +28,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pinorobotics.jros1rviztools.JRos1RvizTools;
 import pinorobotics.jros1rviztools.JRos1RvizToolsFactory;
-import pinorobotics.jrosrviztools.JRosRvizTools;
 import pinorobotics.jrosrviztools.entities.Color;
 import pinorobotics.jrosrviztools.entities.MarkerType;
 import pinorobotics.jrosrviztools.entities.Point;
@@ -44,7 +44,7 @@ public class JRos1RvizToolsIntegrationTests {
     private static final JRos1ClientFactory clientFactory = new JRos1ClientFactory();
     private static final JRos1RvizToolsFactory toolsFactory = new JRos1RvizToolsFactory();
     private JRosClient client;
-    private JRosRvizTools rvizTools;
+    private JRos1RvizTools rvizTools;
 
     @BeforeAll
     public static void setupAll() {
@@ -54,7 +54,7 @@ public class JRos1RvizToolsIntegrationTests {
     @BeforeEach
     public void setup() throws MalformedURLException {
         client = clientFactory.createClient(URL);
-        rvizTools = toolsFactory.createJRosRvizTools(client, "map", RVIZ_MARKER_TOPIC);
+        rvizTools = toolsFactory.createRvizTools(client, "map", RVIZ_MARKER_TOPIC);
     }
 
     @AfterEach
