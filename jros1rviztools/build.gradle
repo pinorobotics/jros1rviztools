@@ -23,14 +23,14 @@ eclipse.classpath.file {
 }
 
 dependencies {
-    implementation 'io.github.pinorobotics:jrosrviztools:1.0-SNAPSHOT'
-    implementation 'io.github.lambdaprime:jros1client:5.0-SNAPSHOT'
-    implementation 'io.github.lambdaprime:jros1messages:1.0-SNAPSHOT'
+    implementation 'io.github.pinorobotics:jrosrviztools:1.0'
+    implementation 'io.github.lambdaprime:jros1client:5.0'
+    implementation 'io.github.lambdaprime:jros1messages:1.0'
     
     // transitively export following dependency to tests project
-    apiElements 'io.github.pinorobotics:jrosrviztools:1.0-SNAPSHOT'
-    apiElements 'io.github.lambdaprime:jros1client:5.0-SNAPSHOT'
-    apiElements 'io.github.lambdaprime:jros1messages:1.0-SNAPSHOT'
+    apiElements 'io.github.pinorobotics:jrosrviztools:1.0'
+    apiElements 'io.github.lambdaprime:jros1client:5.0'
+    apiElements 'io.github.lambdaprime:jros1messages:1.0'
 }
 
 jar { 

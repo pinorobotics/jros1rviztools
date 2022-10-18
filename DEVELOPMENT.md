@@ -1,6 +1,6 @@
-# Making changes
+# Build
 
-Building module locally and making changes to it (this is optional and not intended for the users).
+Building  module locally and making changes to it (this is optional and not intended for users).
 
 ## With Eclipse
 
@@ -11,3 +11,14 @@ gradle eclipse
 ```
 
 - Import them into Eclipse
+
+# Release steps
+
+- Close version in gradle.properties
+- Run `gradle clean build javadoc`
+- Publish
+- Open next SNAPSHOT version
+- Commit changes
+- Push
+- Create new release in GitHub
+- Upload documentation to website
