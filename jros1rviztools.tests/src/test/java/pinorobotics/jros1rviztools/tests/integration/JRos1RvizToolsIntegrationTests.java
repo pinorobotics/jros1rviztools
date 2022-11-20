@@ -17,18 +17,10 @@
  */
 package pinorobotics.jros1rviztools.tests.integration;
 
-import static pinorobotics.jros1rviztools.tests.integration.TestConstants.RVIZ_MARKER_TOPIC;
-import static pinorobotics.jros1rviztools.tests.integration.TestConstants.URL;
-
 import id.jros1client.JRos1ClientFactory;
-import id.jrosclient.JRosClient;
 import id.xfunction.logging.XLogger;
-import java.net.MalformedURLException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pinorobotics.jros1rviztools.JRos1RvizTools;
 import pinorobotics.jros1rviztools.JRos1RvizToolsFactory;
 import pinorobotics.jrosrviztools.entities.Color;
 import pinorobotics.jrosrviztools.entities.MarkerType;
@@ -41,32 +33,25 @@ import pinorobotics.jrosrviztools.entities.Scales;
  */
 public class JRos1RvizToolsIntegrationTests {
 
-    private static final JRos1ClientFactory clientFactory = new JRos1ClientFactory();
-    private static final JRos1RvizToolsFactory toolsFactory = new JRos1RvizToolsFactory();
-    private JRosClient client;
-    private JRos1RvizTools rvizTools;
-
     @BeforeAll
     public static void setupAll() {
         XLogger.load("jrosrviztools-test.properties");
     }
 
-    @BeforeEach
-    public void setup() throws MalformedURLException {
-        client = clientFactory.createClient(URL);
-        rvizTools = toolsFactory.createRvizTools(client, "map", RVIZ_MARKER_TOPIC);
-    }
-
-    @AfterEach
-    public void clean() throws Exception {
-        rvizTools.close();
-        client.close();
-    }
-
     @Test
-    public void test_all() throws Exception {
-        rvizTools.publishText(
-                Color.RED, Scales.XLARGE, new Pose(new Point(0, 0, 1)), "Hello from Java");
-        rvizTools.publishMarkers(Color.RED, Scales.XLARGE, MarkerType.SPHERE, new Point(1, 0, 1));
+    public void test_example_from_documentation() throws Exception {
+        var clientFactory = new JRos1ClientFactory();
+        var rvizToolsFactory = new JRos1RvizToolsFactory();
+        try (var client = clientFactory.createClient("http://127.0.0.1:11311/");
+                var rvizTools =
+                        rvizToolsFactory.createRvizTools(
+                                client, "map", "/visualization_marker_array")) {
+            rvizTools.publishText(
+                    Color.RED, Scales.XLARGE, new Pose(new Point(0, 0, 1)), "Hello from Java");
+            rvizTools.publishMarkers(
+                    Color.RED, Scales.XLARGE, MarkerType.SPHERE, new Point(1, 0, 1));
+            System.out.println("Press Enter to stop...");
+            System.in.read();
+        }
     }
 }
