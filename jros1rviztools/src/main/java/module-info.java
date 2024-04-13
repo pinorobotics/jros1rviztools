@@ -31,7 +31,8 @@
  *
  * <p>For usage examples see <a href="http://pinoweb.freetzi.com/jrosrviztools">Documentation</a>
  *
- * @see <a href="https://github.com/pinorobotics/jros1rviztools/releases">Download</a>
+ * @see <a href=
+ *     "https://github.com/pinorobotics/jros1rviztools/blob/main/jros1rviztools/release/CHANGELOG.md">Releases</a>
  * @see <a href="https://github.com/pinorobotics/jros1rviztools">GitHub repository</a>
  * @author aeon_flux aeon_flux@eclipso.ch
  */

@@ -90,7 +90,8 @@ task updateVersion() {
   new id.xfunction.text.Substitutor()
     .withRegexpSupport()
     .substitute(java.nio.file.Paths.get("${project.rootDir}/README.md"), Map.of(
-      "io.github.${zzNamespace}:${zzName}:[0-9.]+", "io.github.${zzNamespace}:${zzName}:" + version
+      "io.github.${zzNamespace}:${zzName}:[0-9.]+".toString(),
+      "io.github.${zzNamespace}:${zzName}:${version}".toString()
     ));
 }
 createRelease.dependsOn updateVersion

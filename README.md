@@ -14,7 +14,7 @@ Gradle:
 
 ```
 dependencies {
-  implementation 'io.github.pinorobotics:jros1rviztools:1.0'
+  implementation 'io.github.pinorobotics:jros1rviztools:2.0'
 }
 ```
 
