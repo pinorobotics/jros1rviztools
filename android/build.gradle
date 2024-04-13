@@ -1,0 +1,44 @@
+plugins {
+  id 'com.android.library' version '8.2.0' apply false
+}
+
+apply plugin: 'com.android.library'
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(zzJavaVersion)
+  }
+}
+
+dependencies {
+  zzApiDependencies.split(',').each { api it }
+}
+
+android {
+  namespace "${zzNamespace}.${zzName}"
+  compileSdk Integer.parseInt(zzAndroidSdkVersion)
+  compileOptions {
+    sourceCompatibility zzJavaVersion
+  }
+  lintOptions {
+    abortOnError false
+  }
+  sourceSets {
+    def srcMain = "../${zzName}/src/main/java"
+    def srcGen = "../${zzName}/src/main/gen"
+    assert file(srcMain).exists()
+    main {
+      java {
+        srcDirs += [
+          srcMain,
+          srcGen
+        ]
+      }
+    }
+  }
+  defaultConfig {
+    targetSdkVersion zzAndroidSdkVersion
+    minSdkVersion zzAndroidSdkVersion
+  }
+}
+
