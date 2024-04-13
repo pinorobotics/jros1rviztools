@@ -1,8 +1,12 @@
 **jros1rviztools** - Java module which allows to interact with RViz in ROS1 (Robot Operating System).
 
+# Requirements
+
+Java 17+
+
 # Download
 
-[Release versions](https://github.com/pinorobotics/jros1rviztools/releases)
+[Release versions](jros1rviztools/release/CHANGELOG.md)
 
 Or you can add dependency to it as follows:
 
@@ -10,7 +14,7 @@ Gradle:
 
 ```
 dependencies {
-    implementation 'io.github.pinorobotics:jros1rviztools:1.0'
+  implementation 'io.github.pinorobotics:jros1rviztools:1.0'
 }
 ```
 
@@ -20,6 +24,6 @@ dependencies {
 
 [Development](DEVELOPMENT.md)
 
-# Contributors
+# Contacts
 
 aeon_flux <aeon_flux@eclipso.ch>

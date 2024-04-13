@@ -1,24 +1,23 @@
 plugins {
-    id 'java'
-    id 'com.diffplug.spotless'
+  id 'com.diffplug.spotless'
 }
 
-apply plugin : 'eclipse'
-
 eclipse.classpath.file {
-    // intruct eclipse plugin to put everything to module path
-    whenMerged {
-        entries.findAll { it.kind == 'lib' }.each { it.entryAttributes['module'] = 'true' }
-    }
+  // instruct eclipse plugin to put everything to module path
+  whenMerged {
+    entries.findAll { it.kind == 'lib' }.each { it.entryAttributes['module'] = 'true' }
+  }
 }
 
 dependencies {
-    testImplementation project(':jros1rviztools')
-    testImplementation 'io.github.lambdaprime:jros1client:6.0-SNAPSHOT'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.4.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
-    testRuntimeOnly 'org.junit.platform:junit-platform-commons:1.7.0'
+  testImplementation project(":${zzName}")
+  zzTestDependencies.split(',').each { testImplementation it }
+
+  def junitVersion = "5.8.1"
+  testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+  testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+  testRuntimeOnly "org.junit.platform:junit-platform-commons:1.7.0"
 }
 
 java {
@@ -39,7 +38,11 @@ compileTestJava {
 }
 
 test {
-    useJUnitPlatform()
+  useJUnitPlatform()
+
+  testLogging {
+    events "started", "failed"
+  }
 }
 
 // run spotless and format code before the build

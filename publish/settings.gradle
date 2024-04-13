@@ -1,4 +1,3 @@
 // list of subprojects to publish to Sonatype repo
 
-include 'jros1rviztools'
-project(':jros1rviztools').projectDir = new File(rootDir, '../jros1rviztools')
+include "${zzName}"

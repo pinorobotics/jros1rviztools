@@ -1,56 +1,58 @@
 // include xfunction for updateVersion
 buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "io.github.lambdaprime:id.xfunction:14.0"
-    }
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "io.github.lambdaprime:id.xfunction:23.0"
+  }
 }
 
 plugins {
-    id 'java'
-    id 'com.diffplug.spotless'
+  id 'com.diffplug.spotless'
+  // only if you build Java library
+  id 'java-library'
+}
+
+boolean isReleaseBuild() {
+  return version != null && version.matches("\\d+[.\\d+]*");
 }
 
 apply plugin : 'eclipse'
 
 eclipse.classpath.file {
-    // instruct eclipse plugin to put everything to module path
-    whenMerged {
-        entries.findAll { it.kind == 'lib' }.each { it.entryAttributes['module'] = 'true' }
-    }
+  // instruct eclipse plugin to put everything to module path
+  whenMerged {
+    entries.findAll { it.kind == 'lib' }.each { it.entryAttributes['module'] = 'true' }
+  }
 }
 
 dependencies {
-    def jrosrviztools = 'io.github.pinorobotics:jrosrviztools:2.0-SNAPSHOT'
-    def jros2messages = 'io.github.lambdaprime:jros1messages:2.0-SNAPSHOT'
-    
-    implementation "${jrosrviztools}"
-    implementation "${jros2messages}"
-    
-    // transitively export following dependency to tests project
-    apiElements "${jrosrviztools}"
-    apiElements "${jros2messages}"
+  zzApiDependencies.split(',').each { api it }
 }
 
-jar { 
-    manifest { 
-        attributes 'Implementation-Version': "${rootProject.version}"
-    }
+jar {
+  manifest { 
+    attributes 'Implementation-Version': "${version}"
+  }
 }
 
 javadoc {
-    options.noTimestamp = true;
-    options.noQualifiers = ["all"];
-    options.noTree = true;
-    options.noIndex = true;
-    options.noNavBar = true;
-    // ignore missing @return, @param etc
-    options.addBooleanOption('Xdoclint:all,-missing', true)
+  options.noTimestamp = true
+  options.noQualifiers = ["all"]
+  options.noTree = true
+  options.noIndex = true
+  options.noNavBar = true
+  // ignore missing @return, @param etc
+  options.addBooleanOption('Xdoclint:all,-missing', true)
+  options.addStringOption('-show-packages', 'exported')
+  if (!zzJavadocLinks.isBlank()) {
+    // should point to location of element-list files
+    options.addMultilineStringsOption("link").value = Arrays.asList(zzJavadocLinks.split(','))
+  }
 }
 
-def packageDir = "$buildDir/package/${projectName}"
+def packageDir = "$buildDir/package/${zzName}"
 
 task createRelease(type: Zip) {
     archiveFileName = "$releaseFileName"
@@ -71,7 +73,7 @@ task createPackage(type: Copy, dependsOn: [copyLibs]) {
 }
 
 task cleanRelease(type: Delete) {
-    delete "$projectDir/release"
+  delete "$projectDir/release/*-SNAPSHOT.zip"
 }
 
 createRelease.dependsOn createPackage, javadoc
@@ -81,26 +83,26 @@ clean.dependsOn cleanRelease
 // run spotless and format code before the build
 classes.dependsOn spotlessApply
 
-if (project.hasProperty('publish')) {
+task updateVersion() {
+  // update version only during release build
+  if (!isReleaseBuild()) return;
+  println "Updating version to " + version
+  new id.xfunction.text.Substitutor()
+    .withRegexpSupport()
+    .substitute(java.nio.file.Paths.get("${project.rootDir}/README.md"), Map.of(
+      "io.github.${zzNamespace}:${zzName}:[0-9.]+", "io.github.${zzNamespace}:${zzName}:" + version
+    ));
+}
+createRelease.dependsOn updateVersion
 
-  // update version only during publishing
-  task updateVersion() {
-      if (version.contains("SNAPSHOT")) return;
-      println "Updating version to " + version
-      new id.xfunction.text.Substitutor()
-          .withRegexpSupport()
-          .substitute(java.nio.file.Paths.get("${project.rootDir}/README.md"), Map.of(
-              "io.github.pinorobotics:jros1rviztools:[0-9.]+", "io.github.pinorobotics:jros1rviztools:" + version
-          ));
-  }
-  createPackage.dependsOn updateVersion
+if (project.hasProperty('publish')) {
 
   // Initially it was taken from https://central.sonatype.org/publish/publish-gradle/
   // but since Gradle removed this plugin https://docs.gradle.org/7.0/userguide/upgrading_version_6.html#removal_of_the_legacy_maven_plugin
   // it was rewritten for new one
 
   task javadocJar(type: Jar) {
-    classifier = 'javadoc'
+    archiveClassifier = 'javadoc'
     from "README-javadoc.txt"
   }
 
@@ -119,13 +121,13 @@ if (project.hasProperty('publish')) {
   publishing {
     publications {
       mavenJava(MavenPublication) {
-        artifactId = 'jros1rviztools'
-        groupId = 'io.github.pinorobotics'
+        artifactId = zzName
+        groupId = "io.github.${zzNamespace}"
         from components.java
         pom {
-          name = 'jros1rviztools'
-          description = 'Java module to interact with RViz in ROS1 (Robot Operating System)'
-          url = 'http://pinoweb.freetzi.com/jrosrviztools'
+          name = zzName
+          description = zzDescription
+          url = zzUrl
 
           licenses {
             license {
@@ -136,13 +138,13 @@ if (project.hasProperty('publish')) {
 
           developers {
             developer {
-              id = 'aeon'
-              email = 'aeon_flux@eclipso.ch'
+              id = zzDevName
+              email = zzDevEmail
             }
           }
 
           scm {
-            url = 'https://github.com/pinorobotics/jros1rviztools'
+            url = zzRepoUrl
           }
         }
       }
@@ -155,7 +157,7 @@ if (project.hasProperty('publish')) {
         }
         url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
       }
-    }    
+    }
   }
 
   if (project.hasProperty('signing.secretKeyRingFile')) {
